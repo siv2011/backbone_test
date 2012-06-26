@@ -13,12 +13,12 @@
             Kinvey.ping({
                 success: function(response) {
                     $("body").append("<div>Success Pinging Kinvey</div>"); // Nice! Everything went smoothly. 
-                    console.log("Success")
+                    console.log("Success");
                 },
 
                 error: function(error) {
                     $("body").append("<div>Failed Pinging Kinvey</div>"); // Oops. An error occured.
-                    console.log("Fail") 
+                    console.log("Fail");
                 }
             });
         });
