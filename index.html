@@ -1,20 +1,28 @@
 This is my awesome application.
 <body>
     <script async src="//da189i1jfloii.cloudfront.net/js/kinvey-js-0.9.4.min.js">
+            
     </script>
-    
-    Kinvey.init({ appKey: 'kid1922', appSecret: 'db7ee3e6e0854086958c3792622a0906'
-    }); 
+    <script>
+        $(function() {
+        Kinvey.init({
+            appKey: 'kid1922',
+            appSecret: 'db7ee3e6e0854086958c3792622a0906'
+        });
 
-    Kinvey.ping({ success: function(response) { $("body").append("
+        Kinvey.ping({
+            success: function(response) {
+                $("body").append("
     	<div>
         	Success Pinging Kinvey
     	</div>
     "); // Nice! Everything went smoothly. }, 
-
-    error: function(error) { $("body").append("
+                error: function(error) {
+                    $("body").append("
         <div>
         	Failed Pinging Kinvey
     	</div>
     "); // Oops. An error occured. } });
+                });
+    </script>
 </body>
