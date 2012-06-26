@@ -1,0 +1,150 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+      <script src='jquery.min.js'></script>
+      <script src='jquery.mustache.js'></script>
+      <script src='jquery.base64.js'></script>
+      <script src='underscore.js'></script>
+      <script src='backbone.js'></script>
+</head>
+<body>
+<script>
+$(function() {
+
+  var kinvey_app_key = 'kid1922';
+  var kinvey_secret = 'db7ee3e6e0854086958c3792622a0906';
+
+  // Modified sync to add authorization header for use with Kinvey
+  var authenticatedKinveySync = function(method, model, options) {
+
+    options.beforeSend = function(jqXHR) {
+      jqXHR.setRequestHeader(
+      'Authorization', 
+      'Basic ' + $.base64.encode(
+      kinvey_app_key + ':' + kinvey_secret
+      )
+      );
+    }
+
+    // Call the default Backbone sync implementation
+    Backbone.sync.call(this, method, model, options);  
+  }
+  
+
+  var Contact = window.Contact = Backbone.Model.extend({
+   idAttribute: '_id',
+   sync: authenticatedKinveySync
+  });
+
+  var ContactCollection = Backbone.Collection.extend({
+    model: Contact,
+    sync: authenticatedKinveySync,
+    url: function() {
+        return 'https://baas.kinvey.com/appdata/' + kinvey_app_key + '/user_submissions/';
+    }
+    
+  });
+
+
+  var ContactCollectionView = Backbone.View.extend({
+    tagName: "ul",
+
+    initialize: function() {
+      _.bindAll(this,"render");
+      this.collection.on("add remove reset",this.render);
+    },
+
+    render: function() {
+      $(this.el).empty();
+      this.collection.each(function(contact) {
+        $(this.el).append(new ContactView({model: contact }).render().el);
+      },this);
+      return this;
+    }
+  });
+
+  var ContactView = Backbone.View.extend({
+    tagName: "li",
+
+    events: {
+      "click button": "deleteme"
+    },
+
+    initialize: function(options) {
+      _.bindAll(this,"render","deleteme");
+      this.model.on("change",this.render);
+    },
+
+    render: function() {
+      $(this.el).empty()
+                .append($("#contact-template").mustache(this.model.attributes));
+      return this;
+    },
+
+    deleteme: function() {
+      this.model.destroy();
+    }
+  });
+
+
+  var AddContactView = Backbone.View.extend({
+    events: {
+      "click button": "addcontact"
+    },
+
+    initialize: function(options) {
+
+    },
+
+    render: function() {
+      $(this.el).empty()
+                .append($("#contact-create").mustache());
+      return this;
+    },
+
+    addcontact: function() {
+      var contact = new Contact({
+        first_name: this.$("#first_name").val(),
+        last_name: this.$("#last_name").val(),
+        phone: this.$("#phone").val() });
+      contacts.add(contact);
+      contact.save();
+      this.render();
+    }
+  });
+
+   var contacts = window.contacts = new ContactCollection();
+   $("#container").append(new AddContactView().render().el);
+   $("#container").append(new ContactCollectionView({ collection: contacts }).render().el);
+   contacts.fetch();
+});
+
+
+</script> 
+
+<script type='mustache' id='contact-template'>
+<div>
+  {{first_name}} {{last_name}} - {{phone}} <button>Delete</button>
+</div>
+</script>
+
+<script type='mustache' id='contact-create'>
+<div>
+  <input placeholder='first name' id="first_name" />
+  <input placeholder='last name' id="last_name" />
+  <input placeholder='phone' id="last_name" />
+  <button>Add</button>
+</div>
+</script>
+
+
+<div id='container'>
+
+</div>
+
+</script>
+</body>
+</html>
