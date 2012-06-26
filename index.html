@@ -1,28 +1,26 @@
-This is my awesome application.
-<body>
-    <script async src="//da189i1jfloii.cloudfront.net/js/kinvey-js-0.9.4.min.js">
-            
-    </script>
-    <script>
-        $(function() {
-        Kinvey.init({
-            appKey: 'kid1922',
-            appSecret: 'db7ee3e6e0854086958c3792622a0906'
-        });
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+</head>
 
-        Kinvey.ping({
-            success: function(response) {
-                $("body").append("
-    	<div>
-        	Success Pinging Kinvey
-    	</div>
-    "); // Nice! Everything went smoothly. }, 
+<body>
+    <script src="http://da189i1jfloii.cloudfront.net/js/kinvey-js-0.9.4.min.js"></script>
+    <script>
+            $(function() {
+            Kinvey.init({
+                appKey: 'kid1922',
+                appSecret: 'db7ee3e6e0854086958c3792622a0906'});
+
+            Kinvey.ping({
+                success: function(response) {
+                    $("body").append("<div>Success Pinging Kinvey</div>"); // Nice! Everything went smoothly. 
+                    console.log("Success")
+                },
+
                 error: function(error) {
-                    $("body").append("
-        <div>
-        	Failed Pinging Kinvey
-    	</div>
-    "); // Oops. An error occured. } });
-                });
+                    $("body").append("<div>Failed Pinging Kinvey</div>"); // Oops. An error occured.
+                    console.log("Fail") 
+                }
+            });
+        });
     </script>
 </body>
