@@ -43,7 +43,7 @@ $(function() {
     model: Contact,
     sync: authenticatedKinveySync,
     url: function() {
-        return 'https://baas.kinvey.com/appdata/' + kinvey_app_key + '/user_submissions/';
+        return 'https://baas.kinvey.com/appdata/' + kinvey_app_key + '/usermusicdetails/';
     }
     
   });
@@ -135,7 +135,7 @@ $(function() {
 <div>
   <input placeholder='first name' id="first_name" />
   <input placeholder='last name' id="last_name" />
-  <input placeholder='phone' id="last_name" />
+  <input placeholder='phone' id="phone" />
   <button>Add</button>
 </div>
 </script>
