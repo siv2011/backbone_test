@@ -1,1 +1,21 @@
 This is my awesome application.
+
+<body>
+
+<script async src="//da189i1jfloii.cloudfront.net/js/kinvey-js-0.9.4.min.js"></script>
+
+Kinvey.init({
+    appKey: '<kid1922>',
+    appSecret: '<db7ee3e6e0854086958c3792622a0906>'
+});
+
+Kinvey.ping({
+    success: function(response) {
+        // Nice! Everything went smoothly.
+    },
+    error: function(error) {
+        // Oops. An error occured.
+    }
+});
+
+</body>
